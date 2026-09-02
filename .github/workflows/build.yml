@@ -1,0 +1,142 @@
+# Sales Tarafı lip-sync worker imajı: build + GHCR push.
+# Tetik: elle (workflow_dispatch) ya da v* etiketi. İmaj asla :latest ile etiketlenmez;
+# RunPod endpoint'i iş özetine yazılan digest ile açılır.
+name: build-worker-image
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_version:
+        description: "İmaj sürümü (örn. 1.0.0)"
+        required: true
+        default: "1.0.0"
+      pin_weights:
+        description: "İlk build: weights.sha256 üret (true). Sonraki build'ler: doğrula (false)"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/sales-lipsync-musetalk
+  MUSETALK_COMMIT: 0a89dec45a0192b824e3cf4daf96c239440c5ed8
+  FFMPEG_URL: https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - name: Kaynak
+        uses: actions/checkout@v4
+
+      # Runner'da varsayılan ~14 GB boş alan var; CUDA imajı ve ara katmanlar 30 GB üstü ister.
+      - name: Disk alanı aç
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: true
+
+      - name: Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: GHCR girişi
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sürüm
+        id: ver
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            v="${GITHUB_REF_NAME#v}"
+            pin="false"
+          else
+            v="${{ inputs.image_version }}"
+            pin="${{ inputs.pin_weights }}"
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "pin=$pin" >> "$GITHUB_OUTPUT"
+          echo "Sürüm: $v · pin: $pin"
+
+      - name: ffmpeg sha256
+        id: ffmpeg
+        shell: bash
+        run: |
+          curl -fsSL -o /tmp/ffmpeg.tar.xz "$FFMPEG_URL"
+          sha="$(sha256sum /tmp/ffmpeg.tar.xz | cut -d' ' -f1)"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "FFMPEG_SHA256=$sha"
+
+      - name: CPU testleri
+        shell: bash
+        run: |
+          docker buildx build --target test -t sales-lipsync-test --load .
+          docker run --rm sales-lipsync-test
+
+      # İlk build: ağırlık listesi üretilir ve artifact olarak verilir; repo'ya eklenmesi gerekir.
+      - name: Ağırlık listesi (pin modu)
+        if: steps.ver.outputs.pin == 'true'
+        shell: bash
+        run: |
+          docker buildx build --platform linux/amd64 --target weights \
+            --build-arg WEIGHTS_PIN=--pin -t sales-lipsync-weights --load .
+          docker run --rm sales-lipsync-weights cat /tools/weights.sha256 > weights.sha256
+          echo "weights.sha256 satır sayısı: $(wc -l < weights.sha256)"
+
+      - name: weights.sha256 artifact
+        if: steps.ver.outputs.pin == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: weights-sha256
+          path: weights.sha256
+          if-no-files-found: error
+
+      - name: Doğrulama modu kontrolü
+        if: steps.ver.outputs.pin != 'true'
+        shell: bash
+        run: |
+          test -f weights.sha256 || { echo "weights.sha256 yok: önce pin modunda build alıp dosyayı repo'ya ekleyin" >&2; exit 1; }
+
+      - name: Runtime imajı build + push
+        shell: bash
+        run: |
+          docker buildx build --platform linux/amd64 --target runtime \
+            --build-arg MUSETALK_COMMIT="$MUSETALK_COMMIT" \
+            --build-arg FFMPEG_SHA256="${{ steps.ffmpeg.outputs.sha }}" \
+            --build-arg IMAGE_VERSION="${{ steps.ver.outputs.version }}" \
+            -t "$IMAGE:${{ steps.ver.outputs.version }}" --push .
+
+      - name: Digest
+        shell: bash
+        run: |
+          digest="$(docker buildx imagetools inspect "$IMAGE:${{ steps.ver.outputs.version }}" --format '{{ .Manifest.Digest }}')"
+          {
+            echo "## sales-lipsync-musetalk ${{ steps.ver.outputs.version }}"
+            echo ""
+            echo "| Sabit | Değer |"
+            echo "|---|---|"
+            echo "| İmaj | \`$IMAGE:${{ steps.ver.outputs.version }}\` |"
+            echo "| Digest (RunPod endpoint'ine yazılacak) | \`$IMAGE@$digest\` |"
+            echo "| MUSETALK_COMMIT | \`$MUSETALK_COMMIT\` |"
+            echo "| FFMPEG_SHA256 | \`${{ steps.ffmpeg.outputs.sha }}\` |"
+            echo "| Pin modu | ${{ steps.ver.outputs.pin }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "DIGEST=$IMAGE@$digest"

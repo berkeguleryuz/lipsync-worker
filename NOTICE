@@ -1,0 +1,79 @@
+Lip-sync worker image · third-party component notices
+======================================================
+
+This image contains the open source components listed below. Full license
+texts live in each component's own repository.
+
+1. MuseTalk (code)
+   Copyright: Tencent Music Entertainment Group, 2024
+   License: MIT
+   Source: https://github.com/TMElyralab/MuseTalk (pinned commit: see image env MUSETALK_COMMIT)
+
+2. MuseTalk 1.5 weights (musetalkV15/unet.pth, musetalk.json)
+   Publisher: TMElyralab (Hugging Face: TMElyralab/MuseTalk)
+   README states "any purpose, even commercially"; model card tag creativeml-openrail-m.
+   The OpenRAIL-M use restrictions (no misleading, harmful or discriminatory
+   content) are passed through to the terms of service of the calling product.
+
+3. sd-vae-ft-mse
+   Publisher: Stability AI (Hugging Face: stabilityai/sd-vae-ft-mse)
+   License: MIT
+
+4. Whisper tiny (multilingual)
+   Publisher: OpenAI (Hugging Face: openai/whisper-tiny)
+   License: MIT
+
+5. DWPose (dw-ll_ucoco_384.pth)
+   Publisher: IDEA-Research / yzd-v
+   License: Apache License 2.0
+
+6. face-parsing.PyTorch (79999_iter.pth) and resnet18-5c106cde.pth
+   Publisher: zllrunning (face-parsing.PyTorch), PyTorch (torchvision resnet18)
+   License: MIT (face-parsing.PyTorch), BSD-3 (torchvision)
+
+7. face_detection folder (inside MuseTalk, a copy of face_alignment / S3FD)
+   Copyright: Adrian Bulat
+   License: BSD 3-Clause. The folder ships without a LICENSE file, so the text
+   is included below. The s3fd-619a316812.pth weight is placed in the torch
+   hub cache at build time.
+
+   BSD 3-Clause License
+   Copyright (c) 2017, Adrian Bulat. All rights reserved.
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions are met:
+   1. Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+   3. Neither the name of the copyright holder nor the names of its
+      contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   POSSIBILITY OF SUCH DAMAGE.
+
+8. ffmpeg (static build, johnvansickle.com)
+   License: GPL v3 (static build, includes GPL components) / LGPL components
+   Invoked as a separate process, not linked. Source: https://ffmpeg.org
+
+9. PyTorch, torchvision, torchaudio · BSD-3
+   mmengine, mmcv, mmdet, mmpose (OpenMMLab) · Apache License 2.0
+   diffusers, transformers, accelerate, huggingface_hub (Hugging Face) · Apache License 2.0
+   librosa · ISC · soundfile · BSD-3 · einops · MIT · omegaconf · BSD-3
+   opencv-python-headless · Apache License 2.0 · numpy · BSD-3
+   requests · Apache License 2.0 · runpod (python SDK) · MIT
+
+DELIBERATELY EXCLUDED from the image:
+- MuseTalk repository demo/test data (research only)
+- syncnet/latentsync_syncnet.pt (training only)
+- InsightFace buffalo_l / antelopev2 (non-commercial)
+- Official Wav2Lip weights and derivatives (LRS2/BBC, commercial use prohibited)

@@ -1,0 +1,19 @@
+# MuseTalk 1.5 çalışma zamanı bağımlılıkları (kırpılmış, sürüm sabitli).
+# Üst kaynağın requirements.txt'sinden çıkarılanlar: gradio, tensorflow,
+# tensorboard, gdown (yalnız demo / eğitim / indirme araçları).
+# torch/torchvision/torchaudio (cu118) ve mmengine/mmcv/mmdet/mmpose
+# Dockerfile'da ayrı adımlarla kuruluyor (openmim, CUDA indeksleri).
+diffusers==0.30.2
+accelerate==0.28.0
+numpy==1.23.5
+opencv-python-headless==4.9.0.80
+soundfile==0.12.1
+transformers==4.39.2
+huggingface_hub==0.30.2
+librosa==0.11.0
+einops==0.8.1
+omegaconf==2.3.0
+imageio==2.34.0
+ffmpeg-python==0.2.0
+requests==2.32.3
+runpod==1.7.9

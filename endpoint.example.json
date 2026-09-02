@@ -1,0 +1,40 @@
+{
+  "_aciklama": "RunPod Serverless endpoint ayarları (tasarım bölüm 3.8). Panelden ya da RunPod GraphQL/REST API ile uygulanır. `imageName` digest ile sabitlenir, asla :latest. Env'de R2_ ile başlayan HİÇBİR değişken olmamalı.",
+  "name": "sales-lipsync-musetalk",
+  "template": {
+    "name": "sales-lipsync-musetalk-1.0.0",
+    "imageName": "ghcr.io/<org>/sales-lipsync-musetalk@sha256:<digest>",
+    "containerDiskInGb": 30,
+    "dockerArgs": "",
+    "env": {
+      "ALLOWED_INPUT_HOSTS": "media.example.com",
+      "ALLOWED_UPLOAD_HOST_SUFFIX": ".r2.cloudflarestorage.com",
+      "MAX_AUDIO_SECONDS": "70",
+      "MAX_SOURCE_SECONDS": "90",
+      "MAX_HEIGHT": "1080",
+      "MAX_DOWNLOAD_MB": "300",
+      "CACHE_MAX_AVATARS": "10",
+      "SCORE_ENABLED": "0",
+      "LOG_LEVEL": "info"
+    }
+  },
+  "workersMin": 0,
+  "workersMax": 2,
+  "idleTimeoutSeconds": 30,
+  "executionTimeoutMs": 900000,
+  "flashboot": true,
+  "scalerType": "QUEUE_DELAY",
+  "scalerValue": 4,
+  "networkVolumeId": null,
+  "locations": null,
+  "gpuIds": [
+    "NVIDIA L4",
+    "NVIDIA RTX A5000",
+    "NVIDIA GeForce RTX 3090",
+    "NVIDIA GeForce RTX 4090",
+    "NVIDIA RTX A4000",
+    "NVIDIA RTX A4500"
+  ],
+  "_gpuNotu": "Sıra öncelik: 24 GB standart (L4 / A5000 / 3090) → 24 GB PRO (4090) → 16 GB (A4000 / A4500). Blackwell (5090, RTX PRO 6000, B200) KAPALI: CUDA 11.8 imajı çalışmaz.",
+  "_hesapNotu": "Hesap harcama limiti açık; RUNPOD_API_KEY yalnız bu endpoint'e kısıtlı (restricted key); hesapta 2FA."
+}

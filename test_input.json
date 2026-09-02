@@ -1,0 +1,21 @@
+{
+  "input": {
+    "mode": "render",
+    "audio_url": "https://media.example.com/sales/ornek/audio/s1.mp3",
+    "source_url": "https://media.example.com/avatars/deniz/speaking-source.mp4",
+    "source_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "prep_url": "https://media.example.com/avatars/deniz/prep-000000000000.tar",
+    "output_put_url": "https://ornekhesap.r2.cloudflarestorage.com/ornek-bucket/sales/ornek/clips/s1-000000000000.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=1800&X-Amz-SignedHeaders=host&X-Amz-Signature=0000",
+    "output_key": "sales/ornek/clips/s1-000000000000.mp4",
+    "fps": 25,
+    "options": {
+      "batch_size": 8,
+      "extra_margin": 10,
+      "parsing_mode": "jaw",
+      "left_cheek_width": 90,
+      "right_cheek_width": 90,
+      "score": false
+    }
+  },
+  "policy": { "executionTimeout": 600000, "ttl": 900000 }
+}

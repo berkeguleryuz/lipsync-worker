@@ -35,6 +35,16 @@
     "NVIDIA RTX A4000",
     "NVIDIA RTX A4500"
   ],
-  "_gpuNotu": "Sıra öncelik: 24 GB standart (L4 / A5000 / 3090) → 24 GB PRO (4090) → 16 GB (A4000 / A4500). Blackwell (5090, RTX PRO 6000, B200) KAPALI: CUDA 11.8 imajı çalışmaz.",
-  "_hesapNotu": "Hesap harcama limiti açık; RUNPOD_API_KEY yalnız bu endpoint'e kısıtlı (restricted key); hesapta 2FA."
+  "_gpuNotu": "Sıra öncelik: 24 GB standart (L4 / A5000 / 3090) → 24 GB PRO (4090) → 16 GB (A4000 / A4500). Blackwell (5090, RTX PRO 6000, B200 ve MIG dilimleri) KAPALI: CUDA 11.8 imajı çalışmaz. gpuIds listesi tek başına yetmiyor (RunPod 24 GB havuzuna RTX PRO 6000 MIG 1g.24gb dilimi verebiliyor); allowedCudaVersions 12.6 ile sınırlanarak Blackwell host'ları kesin dışlanır.",
+  "_hesapNotu": "Hesap harcama limiti açık; RUNPOD_API_KEY yalnız bu endpoint'e kısıtlı (restricted key); hesapta 2FA.",
+  "allowedCudaVersions": [
+    "11.8",
+    "12.0",
+    "12.1",
+    "12.2",
+    "12.3",
+    "12.4",
+    "12.5",
+    "12.6"
+  ]
 }

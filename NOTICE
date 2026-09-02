@@ -61,9 +61,9 @@ texts live in each component's own repository.
    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
    POSSIBILITY OF SUCH DAMAGE.
 
-8. ffmpeg (static build, johnvansickle.com)
+8. ffmpeg 8.1 (static build, BtbN/FFmpeg-Builds, GitHub releases)
    License: GPL v3 (static build, includes GPL components) / LGPL components
-   Invoked as a separate process, not linked. Source: https://ffmpeg.org
+   Invoked as a separate process, not linked. Sources: https://ffmpeg.org and https://github.com/BtbN/FFmpeg-Builds
 
 9. PyTorch, torchvision, torchaudio · BSD-3
    mmengine, mmcv, mmdet, mmpose (OpenMMLab) · Apache License 2.0

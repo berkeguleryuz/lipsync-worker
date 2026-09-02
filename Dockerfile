@@ -33,7 +33,7 @@ RUN bash /tools/download_weights.sh /weights ${WEIGHTS_PIN}
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS runtime
 ARG PYTHON_VERSION
 ARG MUSETALK_COMMIT
-ARG FFMPEG_URL=https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+ARG FFMPEG_URL=https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-09-01-13-13/ffmpeg-n8.1.2-50-g1a748fe2cd-linux64-gpl-8.1.tar.xz
 ARG FFMPEG_SHA256
 ARG IMAGE_VERSION=dev
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -63,8 +63,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -fsSL -o /tmp/ffmpeg.tar.xz "${FFMPEG_URL}" \
   && echo "${FFMPEG_SHA256}  /tmp/ffmpeg.tar.xz" | sha256sum -c - \
   && mkdir -p /tmp/ffmpeg && tar -xJf /tmp/ffmpeg.tar.xz -C /tmp/ffmpeg --strip-components=1 \
-  && install -m 0755 /tmp/ffmpeg/ffmpeg /usr/local/bin/ffmpeg \
-  && install -m 0755 /tmp/ffmpeg/ffprobe /usr/local/bin/ffprobe \
+  && install -m 0755 /tmp/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg \
+  && install -m 0755 /tmp/ffmpeg/bin/ffprobe /usr/local/bin/ffprobe \
   && rm -rf /tmp/ffmpeg /tmp/ffmpeg.tar.xz \
   && ffmpeg -version | head -1
 

@@ -76,7 +76,7 @@ equivalent:
 
    ```bash
    git ls-remote https://github.com/TMElyralab/MuseTalk.git HEAD
-   curl -fsSL -o /tmp/ffmpeg.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+   curl -fsSL -o /tmp/ffmpeg.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-09-01-13-13/ffmpeg-n8.1.2-50-g1a748fe2cd-linux64-gpl-8.1.tar.xz
    sha256sum /tmp/ffmpeg.tar.xz
    ```
 

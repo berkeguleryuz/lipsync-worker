@@ -396,14 +396,28 @@ class Runner:
         zaman["blend"] = int(blend_ms[0])
 
         t = time.time()
+        # stdin BURADA KAPATILMAZ: CPython'ın communicate() uygulaması stdin'i
+        # önce flush edip sonra kendisi kapatır; elle kapatılmış bir stdin
+        # "ValueError: flush of closed file" fırlatır ve gerçek sonucu maskeler
+        # (canlıda her render bu hatayla düşüyordu). Blend iş parçacığı yazarken
+        # ffmpeg ölmüşse BrokenPipe hata_kutusu'na düşer, aşağıda raporlanır.
         try:
-            kodlayici.stdin.close()  # type: ignore[union-attr]
-        except Exception:
-            pass
-        _, stderr = kodlayici.communicate()
+            _, stderr = kodlayici.communicate(timeout=600)
+        except subprocess.TimeoutExpired:
+            kodlayici.kill()
+            _, stderr = kodlayici.communicate()
+            raise RuntimeError("ffmpeg kodlama zaman aşımı (600 sn)")
+        except ValueError as hata:
+            # Beklenmedik bir yolda stdin yine kapalıysa süreci bekle, hatayı sakla.
+            kodlayici.wait()
+            stderr = b""
+            hata_kutusu.append(hata)
         zaman["encode"] = int((time.time() - t) * 1000)
         if hata_kutusu:
-            raise RuntimeError(f"blend/encode iş parçacığı hatası: {hata_kutusu[0]}")
+            raise RuntimeError(
+                f"blend/encode iş parçacığı hatası: {hata_kutusu[0]}"
+                + (f" · ffmpeg: {stderr.decode('utf-8', 'ignore').strip()[:200]}" if stderr else "")
+            )
         if kodlayici.returncode != 0:
             raise RuntimeError(f"ffmpeg kodlama hatası: {stderr.decode('utf-8', 'ignore').strip()[:300]}")
         return {"frames": cikti_kare, "timings_ms": zaman}

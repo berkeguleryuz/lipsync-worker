@@ -23,9 +23,22 @@ export HF_HUB_DISABLE_TELEMETRY=1
 mkdir -p "$HEDEF"
 cd "$HEDEF"
 
-echo "==> MuseTalk 1.5 (unet + config), DWPose, face-parse-bisent"
+echo "==> MuseTalk 1.5 (unet + config)"
 huggingface-cli download TMElyralab/MuseTalk \
-  --include "musetalkV15/*" "dwpose/*" "face-parse-bisent/*" \
+  --include "musetalkV15/*" \
+  --local-dir . --local-dir-use-symlinks False
+
+# DWPose ve face-parse ağırlıkları TMElyralab/MuseTalk deposunda YOK; DWPose
+# resmi yayıncıdan (yzd-v), face-parse ise sha256 listesiyle sabitlenmiş HF
+# aynasından (orijinal Google Drive'da; iki bağımsız ayna aynı hash'i veriyor).
+echo "==> DWPose (yzd-v/DWPose, Apache 2.0)"
+mkdir -p dwpose
+huggingface-cli download yzd-v/DWPose dw-ll_ucoco_384.pth \
+  --local-dir dwpose --local-dir-use-symlinks False
+
+echo "==> face-parse-bisent 79999_iter.pth (zllrunning, MIT; HF aynası camenduru/MuseTalk)"
+mkdir -p face-parse-bisent
+huggingface-cli download camenduru/MuseTalk face-parse-bisent/79999_iter.pth \
   --local-dir . --local-dir-use-symlinks False
 
 echo "==> sd-vae-ft-mse"

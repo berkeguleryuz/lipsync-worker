@@ -24,12 +24,14 @@ texts live in each component's own repository.
    License: MIT
 
 5. DWPose (dw-ll_ucoco_384.pth)
-   Publisher: IDEA-Research / yzd-v
+   Publisher: IDEA-Research / yzd-v (Hugging Face: yzd-v/DWPose)
    License: Apache License 2.0
 
 6. face-parsing.PyTorch (79999_iter.pth) and resnet18-5c106cde.pth
    Publisher: zllrunning (face-parsing.PyTorch), PyTorch (torchvision resnet18)
    License: MIT (face-parsing.PyTorch), BSD-3 (torchvision)
+   79999_iter.pth is fetched from the Hugging Face mirror camenduru/MuseTalk and
+   verified against the pinned sha256 list (two independent mirrors agree).
 
 7. face_detection folder (inside MuseTalk, a copy of face_alignment / S3FD)
    Copyright: Adrian Bulat

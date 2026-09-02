@@ -124,7 +124,7 @@ Apply `endpoint.example.json` in the console or through the API.
 | Worker type | Flex, min 0, max 2 |
 | GPU priority | 1) L4 / RTX A5000 / RTX 3090 · 2) RTX 4090 · 3) RTX A4000 / A4500 |
 | Blackwell (5090, RTX PRO, B200) | OFF (CUDA 11.8 image does not run there) |
-| Allowed CUDA versions | 11.8 to 12.6 (this is what actually excludes Blackwell hosts and their MIG slices; the GPU list alone is not enough) |
+| GPU pool string (GraphQL `gpuIds`) | `AMPERE_24,ADA_24,AMPERE_16,-NVIDIA RTX 4000 Ada Generation,-NVIDIA RTX 2000 Ada Generation,-NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb` · the 24 GB pools include RunPod's Blackwell MIG slice, which cannot run a CUDA 11.8 image; the explicit `-` exclusion is what keeps it out (a CUDA version filter does not) |
 | Idle timeout | 30 s |
 | Execution timeout | 900 s (requests lower it via `policy`: render 600 s, prepare 900 s) |
 | FlashBoot | on |

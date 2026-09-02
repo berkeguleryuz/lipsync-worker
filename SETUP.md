@@ -98,7 +98,7 @@ Endpoint → Custom image, or the RunPod API / agent plugin):
 | Image | `ghcr.io/<owner>/sales-lipsync-musetalk@sha256:<digest from the job summary>` |
 | Workers | Flex, min 0, max 2 |
 | GPU priority | 1) L4 / RTX A5000 / RTX 3090 · 2) RTX 4090 · 3) RTX A4000 / A4500; Blackwell off |
-| Allowed CUDA versions | 11.8 to 12.6 (required to exclude Blackwell hosts and MIG slices) |
+| GPU pool exclusion | add `-NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb` to the `gpuIds` pool string (GraphQL `saveEndpoint`); the REST GPU list alone lets that Blackwell MIG slice in, and the image cannot run there |
 | Idle timeout | 30 s |
 | Execution timeout | 900 s |
 | FlashBoot | on |

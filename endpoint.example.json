@@ -35,7 +35,7 @@
     "NVIDIA RTX A4000",
     "NVIDIA RTX A4500"
   ],
-  "_gpuNotu": "Sıra öncelik: 24 GB standart (L4 / A5000 / 3090) → 24 GB PRO (4090) → 16 GB (A4000 / A4500). Blackwell (5090, RTX PRO 6000, B200 ve MIG dilimleri) KAPALI: CUDA 11.8 imajı çalışmaz. gpuIds listesi tek başına yetmiyor (RunPod 24 GB havuzuna RTX PRO 6000 MIG 1g.24gb dilimi verebiliyor); allowedCudaVersions 12.6 ile sınırlanarak Blackwell host'ları kesin dışlanır.",
+  "_gpuNotu": "REST API gpuTypeIds listesini havuzlara çevirir (AMPERE_24, ADA_24, AMPERE_16). 24 GB havuzları RunPod'un Blackwell MIG dilimini (RTX PRO 6000 MIG 1g.24gb) da içerir ve CUDA 11.8 imajı orada çalışmaz; allowedCudaVersions bunu ENGELLEMEZ. Kesin çözüm: GraphQL saveEndpoint ile gpuIds havuz dizgisine '-NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb' dışlaması (gpuIdsPoolString). Yeni Blackwell tipleri havuza eklenirse dışlama listesi güncellenmeli.",
   "_hesapNotu": "Hesap harcama limiti açık; RUNPOD_API_KEY yalnız bu endpoint'e kısıtlı (restricted key); hesapta 2FA.",
   "allowedCudaVersions": [
     "11.8",
@@ -46,5 +46,6 @@
     "12.4",
     "12.5",
     "12.6"
-  ]
+  ],
+  "gpuIdsPoolString": "AMPERE_24,ADA_24,AMPERE_16,-NVIDIA RTX 4000 Ada Generation,-NVIDIA RTX 2000 Ada Generation,-NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb"
 }
